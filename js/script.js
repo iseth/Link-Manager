@@ -162,6 +162,7 @@ function deleteLink() {
                       // console.log("Select Value: ", selectValue);
                       // console.log(thisItem.find("value");
                       selectSelector(selectValue);
+                      $("option[value='" + uid + "']").attr("disabled","disabled");
             });
 
 			document.getElementById("edit-category_val").value = $(this).parent().find("span.catTitle").first().html();
@@ -613,36 +614,6 @@ function updateCat(uid = 0, newCat = "", newParent = 0 ) {
          }
      }
    });
-  // $.ajax({
-  // url: "process.php",
-  // data: "action=getparent&uid="+uid,
-  // success: function(theparent)
-  //    {
-  //      console.log("asdf");
-  //      if (uid != 0 && newParent != 0) {
-  //        $.ajax({
-  //        url: "process.php",
-  //        data: "action=editcat&uid=" + uid + "&category=" + newCat + "&parent=" + newParent,
-  //        success: function(d)
-  //           {
-  //               if(d == "1")
-  //               {
-  //            $("#catTitle-" + uid).html(newCat);
-  //           //clicker.parent().find("span.catTitle").html(newVal);
-  //                   $( "#modal-edit-cat" ).modal("hide");
-  //               }
-  //               else
-  //               {
-  //                   $("#modal").html("An error has occurred saving this to the database.").modal("show");
-  //               }
-  //           }
-  //         });
-  //     }
-  //    },
-  //    error: function(xhr, textStatus, errorThrown){
-  //     alert("uid =>" + uid + "d =>" + d);
-  //  }
-  // });
 }
 
 //check for children to see about adding expand
