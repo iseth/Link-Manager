@@ -14,7 +14,7 @@ protect("1");
 	    <!-- Loading Bootstrap -->
 	    <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-		<script src="js/bootstrap.min.js"></script>
+		<!-- <script src="js/bootstrap.min.js"></script> -->
 		<script src="js/flat-ui.min.js"></script>
 
 	    <!-- Loading Flat UI -->
@@ -129,19 +129,9 @@ protect("1");
 
 	  	<p><span class="ui-icon ui-icon-alert" style="float:left;"></span>Category Location</p>
 
-
 			    <select style="margin-bottom: 20;" class="catEditOption">
-
 			    </select><br />
 
-
-	      <!-- <select class="form-control select select-primary catEditOption" data-toggle="select">
-	        <option value="1" selected>Top Level</option>
-	      </select> -->
-
-				<!-- <select class="form-control select select-primary catEditOption" data-toggle="select">
-				</select>
- -->
       </div>
       <div class="modal-footer">
         <button id="confirm-update-cat-btn" class="btn btn-block btn-lg btn-success">Update</button>

@@ -42,7 +42,7 @@ document.getElementById("confirm-delete-category-btn").onclick = function() {del
 function deleteCat() {
 	$.ajax({
 		url: "process.php",
-		data: "action=getchildren&parent=" + data,
+		data: "action=ifchildren&parent=" + data,
 		success: function(d) {
 			//there's children - can't delete
 			if(d == "1") {
@@ -100,9 +100,9 @@ function deleteLink() {
 
     $("#addCatBtn").click(function() //add category button
     {
-        console.log("Add Cat clicked - > ");
-		console.log(populateSelectCats());
-		console.log("<--");
+    //     console.log("Add Cat clicked - > ");
+		// console.log(populateSelectCats());
+		// console.log("<--");
 
         $(".catOption").html("");
         $("#addCatmodal").modal("show");
@@ -145,17 +145,17 @@ function deleteLink() {
 
           // console.log("this uid is: =>" + uid);
 
-          // console.log(getParent(parseInt($(this).attr("href"))));
-
-          //
-          // if (uid != $(this).parents(".category").last().attr("id").substring(3, 10)) {
-          //   var parentId = $(this).parents(".category").last().attr("id").substring(3, 10);
-          // } else {
-          //   var parentId = 0;
-          // }
-          // console.log("parent: " + parentId);
-
           var thisItem = $(this);
+
+          populateSelectCats("#catEditOption", function(){
+                    var selectValue = thisItem.parents(".category").first().attr("id").substring(3, 10);
+                    // console.log("Select Value: ", selectValue);
+                    // console.log(thisItem.find("value");
+                    selectSelector(selectValue);
+                    $("option[value='" + uid + "']").attr("disabled","disabled");
+
+                    getChildren(uid);
+          });
 
             populateSelectCats(".catEditOption", function(){
                       var selectValue = thisItem.parents(".category").first().attr("id").substring(3, 10);
@@ -417,7 +417,7 @@ function deleteLink() {
 	                    $("#modal").html("An error has occurred.").modal("show");
 	            }
 	         });
-	         $( "#addCatDialog" ).modal("hide");
+	          $( "#addCatDialog" ).modal("hide");
 		 }
     });
 
@@ -461,6 +461,35 @@ function nl2br(value) {
   return value.replace(/\n/g, "<br />");
 }
 
+function getChildren(uid) {
+
+  $.ajax({
+  url: "process.php",
+  data: "action=getchildren&parent=" + uid,
+  success: function(d)
+     {
+         if(d)
+         {
+           var uids = eval(d);
+          //  console.log(uids);
+           var names = ["Chris", "Kate", "Steve"];
+           for(var i in uids)
+           {
+               getChildren(uids[i]);
+//             if(checkChildren(uids[i]) == "0") {
+              //  console.log(uids[i]);
+               $("option[value='" + uids[i] + "']").attr("disabled","disabled");
+//             }
+           }
+         }
+         else
+         {
+             $("#modal").html("An error has occurred saving this to the database.").modal("show");
+         }
+     }
+   });
+}
+
 function saveEditedCat(newCat, newParent, uid) {
     // var newCat = newCat;
     // var newParent =
@@ -496,10 +525,13 @@ function populateCats() {
     success: function(d)
        {
            var results = $.parseJSON(d);
+           console.log(results);
            if (Object.keys(results).length > 0) {
                var prevIndent = false;
                var prevId = "";
                var catSelector = "";
+
+               console.log(results);
                $.each(results, function(key, value)
                {
                   if (prevIndent === false) {
@@ -514,6 +546,7 @@ function populateCats() {
                       }
                   }
 
+                console.log("uid:" + value[0] + "   expand: " + value[2]);
                 if(value[2] > 0) //has children
                 {
                     output = "<span class=\"expand\">+</span>";
@@ -542,10 +575,10 @@ function populateSelectCats(thisSelect = false, callback = false) {
     } else {
         selector = ".cats .catOption";
     }
-/*
-    console.log(thisSelect);
-    console.log("Selector: " + selector);
-*/
+
+    // console.log(thisSelect);
+    // console.log("Selector: " + selector);
+
     $(selector).append("<option value=\"" + 0 + "\">Top Level</option>");
     $.ajax({
     url: "process.php",
@@ -581,6 +614,8 @@ function selectSelector(uid) {
   success: function(d)
      {
        $(".catEditOption").val( d );
+       $("option[value='" + d + "']").attr("selected","selected");
+
      },
      error: function(xhr, textStatus, errorThrown){
       alert("uid =>" + uid + "d =>" + d);
@@ -621,7 +656,7 @@ function checkChildren(uid) {
     var output = "";
     $.ajax({
     url: "process.php",
-    data: "action=getchildren&parent="+uid,
+    data: "action=ifchildren&parent="+uid,
     success: function(d)
        {
            if(d == "1")
@@ -648,7 +683,7 @@ function populateLinks(uid, selector) {
            var results = $.parseJSON(d);
            if (Object.keys(results).length > 0) {
                $.each(results, function(key, value) {
-                   returnHTML += "<div class=\"link item\" style=\"margin-left:20px;\"><span class=\"title\">" + value[0] + "</span><div style=\"width: 370px;\" class=\"\"><form class=\"edit\"><div class=\"editable\" name=\"parent\"></div><div class=\"editable\" name=\"title\"></div><div class=\"editable\" style=\"max-width: 400px; word-wrap:break-word;\" name=\"url\"><a class=\"\" href=\""+ value[1] + "\" target=\"_blank\">🔗" + value[1] + "</a></div><div id=\"welll\" class=\"well\"><div class=\"editable\" style=\"/* margin-top:30px; width: 350px; */\" name=\"description\">" + value[2] + "</div></div><br /><input type=\"button\" value=\"Edit\" style=\"width: 165px; display: inline;\" class=\"editBtn btn btn-block btn-lg btn-primary\" /><input type=\"button\" style=\"width: 165px; margin-top: -1px; margin-left: 20px; display: inline;\" value=\"Delete\" class=\"deleteBtn btn btn-block btn-lg btn-primary\" /><input type=\"hidden\" name=\"uid\" value=\"" + key + "\"/></form></div><br /></div>";
+                   returnHTML += "poplink<div class=\"link item\" style=\"margin-left:20px;\"><span class=\"title\">" + value[0] + "</span><div style=\"width: 370px;\" class=\"\"><form class=\"edit\"><div class=\"editable\" name=\"parent\"></div><div class=\"editable\" name=\"title\"></div><div class=\"editable\" style=\"max-width: 400px; word-wrap:break-word;\" name=\"url\"><a class=\"\" href=\""+ value[1] + "\" target=\"_blank\">🔗" + value[1] + "</a></div><div id=\"welll\" class=\"well\"><div class=\"editable\" style=\"/* margin-top:30px; width: 350px; */\" name=\"description\">" + value[2] + "</div></div><br /><input type=\"button\" value=\"Edit\" style=\"width: 165px; display: inline;\" class=\"editBtn btn btn-block btn-lg btn-primary\" /><input type=\"button\" style=\"width: 165px; margin-top: -1px; margin-left: 20px; display: inline;\" value=\"Delete\" class=\"deleteBtn btn btn-block btn-lg btn-primary\" /><input type=\"hidden\" name=\"uid\" value=\"" + key + "\"/></form></div><br /></div>";
                });
                selector.append(returnHTML);
            }

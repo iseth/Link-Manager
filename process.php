@@ -67,8 +67,12 @@ switch ($action)
         removeCat($db);
         break;
 
+    case "ifchildren":
+        print ifChildren($db, $GLOBALS['data']['parent']);
+        break;
+
     case "getchildren":
-        print getChildren($db);
+        print getChildren($db, $GLOBALS['data']['parent']);
         break;
 
     case "getparent":
@@ -90,20 +94,6 @@ function addCat($db)
 		else
 			print "1";
 }
-
-// function getCats($db)
-// {
-//     $sth = $db->prepare("SELECT * FROM categories");
-//     $sth->execute();
-//
-//     $output = "<option value='0'>No parent</option>";
-//     while($row = $sth->fetch())
-//     {
-//         $output .= "<option value='$row[uid]'>$row[category]</option>";
-//     }
-//
-//     print $output;
-// }
 
 function getParent($uid, $db) {
   $sth = $db->prepare("SELECT parent FROM categories WHERE uid=" . $uid);
@@ -131,7 +121,7 @@ function getCats($uid, $lvl, $db)
                 $tmp_array[$row['category']] = [intval($row['uid']), $lvl, 1];
                 $tmp_array = array_merge($tmp_array,  $children_array);
             } else {
-                if(getChildren($db, $row['uid']) == "1")
+                if(ifChildren($db, $row['uid']) == "1")
                     $tmp_array[$row['category']] = [intval($row['uid']), $lvl, 1];
                 else
                     $tmp_array[$row['category']] = [intval($row['uid']), $lvl, 0];
@@ -265,7 +255,7 @@ function getItemsForCat($db)
     print $output;
 }
 
-function getChildren($db, $parent = null)
+function ifChildren($db, $parent = null)
 {
     $sth = $db->prepare("SELECT * FROM categories WHERE parent=?");
 
@@ -291,6 +281,33 @@ function getChildren($db, $parent = null)
     }
 
     return $output;
+}
+
+function getChildren($db, $parent = null)
+{
+    // return "-> $parent <-";
+    $sth = $db->prepare("SELECT uid FROM categories WHERE parent=$parent");
+
+    if($parent)
+        $GLOBALS['data']['parent'] = $parent;
+
+    $sth->execute( array($GLOBALS['data']['parent']) );
+
+    if(!$sth->rowCount()) //there's no rows
+			$output = "0";
+		else
+      if($sth->rowCount()) //there's no rows
+      {
+          $output .= "[";
+           while($row = $sth->fetch())
+           {
+               $output .= $row['uid'].",";
+           }
+           $output = substr_replace($output, "", -1);
+           $output .= "]";
+      }
+
+    return ($output);
 }
 
 function removeCat($db)
