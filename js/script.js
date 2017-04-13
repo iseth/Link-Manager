@@ -100,10 +100,6 @@ function deleteLink() {
 
     $("#addCatBtn").click(function() //add category button
     {
-    //     console.log("Add Cat clicked - > ");
-		// console.log(populateSelectCats());
-		// console.log("<--");
-
         $(".catOption").html("");
         $("#addCatmodal").modal("show");
         populateSelectCats($(".catOption").first());
@@ -491,11 +487,8 @@ function getChildren(uid) {
 }
 
 function saveEditedCat(newCat, newParent, uid) {
-    // var newCat = newCat;
-    // var newParent =
-
-	console.log(uid);
-	console.log("\"" + newCat + "\"");
+	// console.log(uid);
+	// console.log("\"" + newCat + "\"");
 
     $.ajax({
     url: "process.php",

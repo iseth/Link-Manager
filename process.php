@@ -17,7 +17,6 @@ if($_POST)
 
 $action = $GLOBALS['data']['action'];
 
-
 switch ($action)
 {
     case "editcat":
@@ -35,10 +34,6 @@ switch ($action)
         print(json_encode(getCat($GLOBALS['data']['uid'],$db)));
         break;
 
-    // case "editcat":
-    //     editCat($db);
-    //     break;
-    //
     case "addlink":
         addLink($db);
         break;
@@ -154,25 +149,11 @@ function getCat($uid, $db) {
 
 function editCat($cat, $parent, $uid, $db)
 {
-    // echo ($GLOBALS['data']['uid'] . " => " . $GLOBALS['data']['parent'] . " => " . $GLOBALS['data']['category']);
-     //"UPDATE `categories` SET `parent` = \'"$parent"\', `category` = \'".$cat."\' WHERE `categories`.`uid` = ".$uid;
     $sth = $db->prepare("UPDATE `categories` SET `parent` = '".$parent."', `category` = '".$cat."' WHERE `categories`.`uid` = ".$uid);
 
     $sth->execute( array($parent, $cat, $uid)); //there's no rows
     return "1";
 }
-
-// function editCat($db)
-// {
-//     // $sth = $db->prepare("UPDATE categories SET parent = '72', category = 'root' WHERE categories.uid = ?")
-//     $sth = $db->prepare("UPDATE categories SET category=? WHERE uid=?");
-//     $sth->execute( array($GLOBALS['data']['category'], $GLOBALS['data']['uid'], $GLOBALS['data']['parent']));
-//
-//     if(!$sth->rowCount()) //there's no rows
-//             print "1";
-//         else
-//             print "1";
-// }
 
 function addLink($db)
 {

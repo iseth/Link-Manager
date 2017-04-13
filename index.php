@@ -36,23 +36,7 @@ protect("1");
 				<div class="collapse navbar-collapse" id="navbar-collapse-3">
 					<ul class="nav navbar-nav">
 						<li><a href="#">Links<!-- <span class="navbar-unread">1</span> --></a></li>
-<!--
-						<li class="active"><a href="#">About Us</a></li>
-						<li><a href="#">Clients</a></li>
--->
 					</ul>
-<!--
-					<form class="navbar-form navbar-left" action="#" role="search">
-						<div class="form-group">
-							<div class="input-group">
-								<input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
-								<span class="input-group-btn">
-									<button type="submit" class="btn"><span class="fui-search"></span></button>
-								</span>
-							</div>
-						</div>
-					</form>
--->
 <script>
 		/* When the user clicks on the button,
 	toggle between hiding and showing the dropdown content */
